@@ -1,6 +1,19 @@
 #include "esp_camera.h"
 #include <WiFi.h>
 
+#include <ESP32Servo.h>
+
+#define DUMMY_SERVO1_PIN 12     //We need to create 2 dummy servos.
+#define DUMMY_SERVO2_PIN 13     //So that ESP32Servo library does not interfere with pwm channel and timer used by esp32 camera.
+
+Servo dummyServo1;
+Servo dummyServo2;
+
+
+Servo myservo; // Objeto del servo
+
+int pos = 0; // Variable para almacenar la posición actual
+
 //MODELO DE LA CÁMARA_---------------------------------
 #define CAMERA_MODEL_AI_THINKER // Has PSRAM
 
@@ -24,6 +37,9 @@ void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
+
+   // Configuración del servo
+  myservo.attach(14); // Asigna el servo al pin 14 (ajusta el pin según tu conexión)
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -135,8 +151,26 @@ void setup() {
 }
 
 void loop() {
+
+  // Control del servo (como en tu primer código)
+  for (pos = 0; pos <= 180; pos += 1) {
+    myservo.write(pos);
+    delay(15);
+    //Serial.print("Posición actual: ");
+    //Serial.println(pos);
+  }
+  delay(1000);
+
+  for (pos = 180; pos >= 0; pos -= 1) {
+    myservo.write(pos);
+    delay(15);
+    //Serial.print("Posición actual: ");
+    //Serial.println(pos);
+  }
+  delay(1000);
+
    // Show IP address every 5 seconds
-  delay(5000);
+  //delay(5000);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 }
