@@ -1,18 +1,24 @@
 #include "esp_camera.h"
 #include <WiFi.h>
 
+//SERVO Y IR RECIBE
 #include <ESP32Servo.h>
+#include <IRremote.h>
 
+//SERVOS FICTICIOS
 #define DUMMY_SERVO1_PIN 12     //We need to create 2 dummy servos.
 #define DUMMY_SERVO2_PIN 13     //So that ESP32Servo library does not interfere with pwm channel and timer used by esp32 camera.
 
 Servo dummyServo1;
 Servo dummyServo2;
 
+//SERVO REAL PARA GIRO HORIZONTAL
+Servo servoHorizontal; 
 
-Servo myservo; // Objeto del servo
-
-int pos = 0; // Variable para almacenar la posición actual
+//VARIABLES PARA EL CONTROL DEL SERVO
+int anguloHorizontalInicial = 90;
+int incrementoAngulo = 5;
+int ultimaTeclaPresionada = 0;
 
 //MODELO DE LA CÁMARA_---------------------------------
 #define CAMERA_MODEL_AI_THINKER // Has PSRAM
@@ -33,13 +39,19 @@ const char* password = "snns7pdTxnkw";
 void startCameraServer();
 void setupLedFlash(int pin);
 
+
+  
 void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
 
+  //IR RECIBE EN EL PIN 15-----
+  IrReceiver.begin(15, ENABLE_LED_FEEDBACK);  // Inicia el receptor IR en el pin 15
+
    // Configuración del servo
-  myservo.attach(14); // Asigna el servo al pin 14 (ajusta el pin según tu conexión)
+  servoHorizontal.attach(14); // Asigna el servo al pin 14 (ajusta el pin según tu conexión)
+  servoHorizontal.write(anguloHorizontalInicial);
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -152,25 +164,53 @@ void setup() {
 
 void loop() {
 
-  // Control del servo (como en tu primer código)
-  for (pos = 0; pos <= 180; pos += 1) {
-    myservo.write(pos);
-    delay(15);
-    //Serial.print("Posición actual: ");
-    //Serial.println(pos);
-  }
-  delay(1000);
+  // Control del servoHorizontal con el receptor IR
+  if (IrReceiver.decode()) {
+    int valor = IrReceiver.decodedIRData.command;
 
-  for (pos = 180; pos >= 0; pos -= 1) {
-    myservo.write(pos);
-    delay(15);
-    //Serial.print("Posición actual: ");
-    //Serial.println(pos);
-  }
-  delay(1000);
+    if (valor == 67) {
+      // Derecha
+      anguloHorizontalInicial += incrementoAngulo;
+      if (anguloHorizontalInicial > 180) {
+        anguloHorizontalInicial = 180;
+      }
+      ultimaTeclaPresionada = 67; // Actualiza la última tecla
+    } else if (valor == 68) {
+      // Izquierda
+      anguloHorizontalInicial -= incrementoAngulo;
+      if (anguloHorizontalInicial < 0) {
+        anguloHorizontalInicial = 0;
+      }
+      ultimaTeclaPresionada = 68; // Actualiza la última tecla
+    } else if (valor == 0) {
+      // Si el valor es 0, mueve en la dirección de la última tecla presionada
+      if (ultimaTeclaPresionada == 67) {
+        anguloHorizontalInicial += incrementoAngulo;
+        if (anguloHorizontalInicial > 180) {
+          anguloHorizontalInicial = 180;
+        }
+      } else if (ultimaTeclaPresionada == 68) {
+        anguloHorizontalInicial -= incrementoAngulo;
+        if (anguloHorizontalInicial < 0) {
+          anguloHorizontalInicial = 0;
+        }
+      }
+    }
 
+    servoHorizontal.write(anguloHorizontalInicial);
+
+    Serial.print("Dirección: ");
+    Serial.print((ultimaTeclaPresionada == 67) ? "Derecha" : "Izquierda");
+    Serial.print(", Ángulo: ");
+    Serial.println(anguloHorizontalInicial);
+
+    Serial.print("Valor IR recibido: ");
+    Serial.println(valor);
+
+    IrReceiver.resume(); // Continuar escuchando
+  }
    // Show IP address every 5 seconds
   //delay(5000);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  //Serial.print("IP address: ");
+  //Serial.println(WiFi.localIP());
 }
