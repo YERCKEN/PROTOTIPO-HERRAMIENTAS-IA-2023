@@ -13,3 +13,6 @@ Modificación del Código Ejemplo ESP32/CameraWebServer para lograr la calidad  
 
 # PINES
 ![ESP-32S PINES](https://github.com/YERCKEN/ESP-32S-CAMERA-WEB-SERVER-UXGA_1600x1200/assets/42678417/a14ad18c-8bfb-4116-8069-5d71629ba7aa)
+
+# DIAGRAMA CONEXIÓN: SERVO MOTOR, IR RECIBE, ESP-32S, TTLtoUSB
+![diagramaESP32_CAM_TTLtoUSB-SERVO-IRrecibe_](https://github.com/YERCKEN/ESP-32S-CAMERA-WEB-SERVER-UXGA_1600x1200/assets/42678417/02a77340-7ec3-447f-ae34-7d96a2322de9)
