@@ -65,3 +65,10 @@ Actualmente no se puede monitorear los valores que está recibiendo el ESP32-CAM
 
 # DIAGRAMA CONEXIÓN: ARDUINO UNO R3, ESP-32S, SERVO MOTOR, IR RECIBE, TTLtoUSB, Reloj DS1307
 ![Diagrama SensorIR-ServoMotor-ArduinoUno-Esp32Cam_bb](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/e6c95fe2-eb71-47ee-bcfd-74c789abcd8d)
+
+# SERVER
+En el repositorio se encuentra una carpeta llamada SERVER, ella contiene los archivos necesarios para que el servidor obtenga los datos del ESP32-CAM y lo guarde en la base de datos para que el grupo de FRONTEND puede ver las imagenes actualizadas y además pueda mover el servo
+
+
+Estos archivos fueron entregados a ORLANDO de FRONTEND y se comprobó que todo funciona correctamente, el 3/11/2023 se hicieron pruebas y todo va perfecto.
+Orlando pudo controlar el servo y además obtener imagen de 2 cámaras.
