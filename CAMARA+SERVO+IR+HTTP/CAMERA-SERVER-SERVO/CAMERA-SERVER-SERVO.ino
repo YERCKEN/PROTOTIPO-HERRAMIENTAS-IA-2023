@@ -28,8 +28,24 @@ int ultimaTeclaPresionada = 0;
 
 WebServer server(80);
 
-const char* ssid = "COWIFI209056991/0"; // Cambia a tu SSID de Wi-Fi
-const char* password = "WiFi-83498547"; // Cambia a la contraseña de tu Wi-Fi
+
+// ===========================
+// CONEXIÓN WIFI
+// =================================================================================
+
+//const char* ssid = "COWIFI209056991/0"; // Cambia a tu SSID de Wi-Fi
+//const char* password = "WiFi-83498547"; // Cambia a la contraseña de tu Wi-Fi
+
+//const char* ssid = "Infoplaza 464 UTP"; // Cambia a tu SSID de Wi-Fi
+//const char* password = "1nf0Pla464"; // Cambia a la contraseña de tu Wi-Fi
+
+//const char* ssid = "Yercken";
+//const char* password = "123456789";
+
+const char* ssid = "CWC-7986324-2.4";
+const char* password = "snns7pdTxnkw";
+
+//====================================== =========================================
 
 void startCameraServer();
 void moveServoLeft();
@@ -179,8 +195,9 @@ void capturaOnly() {
   if (lastCapturedImage) {
     String base64Image = "data:image/jpeg;base64,";
 
-    // Encode the image data to base64
+    // Encode the image data to base64Z
     base64Image += base64_encode(lastCapturedImage->buf, lastCapturedImage->len);
+    server.sendHeader("Access-Control-Allow-Origin", "*");
 
     // Send the base64-encoded image in the response
     server.send(200, "text/html", base64Image);
@@ -198,7 +215,30 @@ void startCameraServer() {
   server.on("/capture", HTTP_GET, captureImage);
   server.on("/aux", HTTP_GET, capturaOnly);
 
-  server.on("/capture", HTTP_OPTIONS, [](){
+  //CAPTURA INSTA DESDE CAUQLUIER IP ===========================================================================================
+
+  server.on("/capturaInsta", HTTP_GET, []()
+    {
+                // Habilita el encabezado 'Access-Control-Allow-Origin' para permitir solicitudes desde cualquier origen
+                server.sendHeader("Access-Control-Allow-Origin", "*");
+                server.sendHeader("Access-Control-Max-Age", "10000");
+                server.sendHeader("Access-Control-Allow-Methods", "GET");
+                
+                // Captura la imagen actual
+                captureImage();
+                
+                if (lastCapturedImage) {
+                  String base64Image = "data:image/jpeg;base64,";
+                  base64Image += base64_encode(lastCapturedImage->buf, lastCapturedImage->len);
+                  server.sendHeader("Access-Control-Allow-Origin", "*");
+                  server.send(200, "text/html", base64Image);
+                } else {
+                  server.send(500, "text/plain", "No image captured yet.");
+                }
+  });
+    //===========================================================================================
+
+    server.on("/capture", HTTP_OPTIONS, [](){
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.sendHeader("Access-Control-Max-Age", "10000");
     server.sendHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
@@ -208,8 +248,20 @@ void startCameraServer() {
       server.send(200, "text/html", capture_html); // Serve the HTML file
     });
 
-  server.on("/left", HTTP_GET, moveServoLeft);
-  server.on("/right", HTTP_GET, moveServoRight);
+  //CONTROL DE SERVOS DESDE CUALQUIER IP =================================================================
+  server.on("/left", HTTP_GET, [](){
+      server.sendHeader("Access-Control-Allow-Origin", "*");
+      server.sendHeader("Access-Control-Max-Age", "10000");
+      server.sendHeader("Access-Control-Allow-Methods", "GET");
+      moveServoLeft();
+    });
+  server.on("/right", HTTP_GET, [](){
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+      server.sendHeader("Access-Control-Max-Age", "10000");
+      server.sendHeader("Access-Control-Allow-Methods", "GET");
+      moveServoRight();
+    });
+  // ==========================================================================
   server.begin();
 }
 

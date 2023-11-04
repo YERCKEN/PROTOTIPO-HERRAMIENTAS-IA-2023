@@ -31,14 +31,16 @@ int ultimaTeclaPresionada = 0;
 //const char* ssid = "Yercken";
 //const char* password = "123456789";
 
-const char* ssid = "CWC-7986324-2.4";
-const char* password = "snns7pdTxnkw";
+//const char* ssid = "CWC-7986324-2.4";
+//const char* password = "snns7pdTxnkw";
 
+
+const char* ssid = "Infoplaza 464 UTP";
+const char* password = "1nf0Pla464";
 
 
 void startCameraServer();
 void setupLedFlash(int pin);
-
 
   
 void setup() {
