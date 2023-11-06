@@ -5,10 +5,49 @@
 - Control de los servos motores, através de señales IR y parámetros obtenidos desde el ESP32-CAM luego de recibir infromación del servidor.
 - Control del tiempo con el módulo PCF8523
 - Control de los LEDS indicadores.
+- *Compartirá información con el ESP32-CAM*
+
+
+![image](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/ac30ea11-10bd-44e6-a98a-2305553a19ef)
+
 
 **2. ESP32-CAM**
 - Se encargará de capturar imagenes, transformarlas a BASE64 y enviarlas al servidor
 - Recibirá información (códigos) de parte del servidor que se utilizarán para, el control de los servos, y errores indicados con las LEDS
+- *Compartirá información con el ARDUINO UNO R3*
+
+
+
+![kstm0706-esp32-cam-development-board-1](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/5b5c4514-b004-4b7c-8434-7b8340a9d515)
+
+
+**3. FT232RL FTDI Mini USB a TTL Convertidor Serial Adaptador**
+- Permitirá cargar código al ESP32-CAM desde el PC
+
+  
+![image](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/5c9c2e05-bf13-4381-832f-d611072c82b7)
+
+**4. ×2 MICRO-SERVO MOTORES SG90 (9 gramos)**
+- Se encargarán de hacer girarar el módulo ESP32-CAM en ***180° ( X & Y )***
+
+
+![image](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/6a094dbe-c3a5-4750-9317-b4df7fb1620b)
+
+
+**5. IR RECIBE**
+- Sensor que permitirá al arduino UNO R3 controlar el movimiento de los servos, luego de recibir las señales IR desde un control remoto.
+
+  
+![control-remoto-infrarrojo](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/6d751c7b-e08f-499e-8fb8-3da954b725b7)
+
+
+**6. PCF8523**
+- Módulo con reloj RTC que permitirá al arduino controlar intervalos en donde el ESP32-CAM capturará imagenes.
+
+
+![image](https://github.com/YERCKEN/PROTOTIPO-HERRAMIENTAS-IA-2023/assets/42678417/0454ef44-154b-403d-9390-d8f7ddaba366)
+
+
 
 
 # DIAGRAMA DE CONEXIONES TTL Convertidor Serial Adaptador & El ESP32-CAM
