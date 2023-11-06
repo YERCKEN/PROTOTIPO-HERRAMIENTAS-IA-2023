@@ -1,10 +1,14 @@
 # PROTOTIPO-HERRAMIENTAS-IA-2023
 
 # MATERIALES
-**1.Arduino UNO R3 ELEGOO**
+**1. Arduino UNO R3 ELEGOO**
 - Control de los servos motores, através de señales IR y parámetros obtenidos desde el ESP32-CAM luego de recibir infromación del servidor.
 - Control del tiempo con el módulo PCF8523
 - Control de los LEDS indicadores.
+
+**2. ESP32-CAM**
+- Se encargará de capturar imagenes, transformarlas a BASE64 y enviarlas al servidor
+- Recibirá información (códigos) de parte del servidor que se utilizarán para, el control de los servos, y errores indicados con las LEDS
 
 
 # DIAGRAMA DE CONEXIONES TTL Convertidor Serial Adaptador & El ESP32-CAM
