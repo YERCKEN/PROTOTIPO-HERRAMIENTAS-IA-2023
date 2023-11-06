@@ -1,5 +1,12 @@
 # PROTOTIPO-HERRAMIENTAS-IA-2023
 
+# MATERIALES
+**1.Arduino UNO R3 ELEGOO**
+- Control de los servos motores, através de señales IR y parámetros obtenidos desde el ESP32-CAM luego de recibir infromación del servidor.
+- Control del tiempo con el módulo PCF8523
+- Control de los LEDS indicadores.
+
+
 # DIAGRAMA DE CONEXIONES TTL Convertidor Serial Adaptador & El ESP32-CAM
 1. FT232RL FTDI Mini USB a TTL Convertidor Serial Adaptador
 2. ESP-32S
