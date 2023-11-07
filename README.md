@@ -98,19 +98,19 @@ Actualmente no se puede monitorear los valores que está recibiendo el ESP32-CAM
     - En el caso que a el ARDUINO UNO RECIBA UN VALOR (-69) enciende el LED AZUL indicando error de POST (en el diagrama se puede observar el LED)
       
 -  **CONTROL DE WIFI**
-  -  (7) = Indica que el módulo está conectado a un WIFI
-  - (-7) = Indica que el módulo no está conectado a un WIFI
-  - Si al arduino UNO le llega un valor (7) enceiende la LED verde indicando que el módulo está correctamente conectado
-  - Si al arduino UNO le llega un valor (-7) el LED verde no enciende hasta que salga un código positivo
+    -  (7) = Indica que el módulo está conectado a un WIFI
+    - (-7) = Indica que el módulo no está conectado a un WIFI
+    - Si al arduino UNO le llega un valor (7) enceiende la LED verde indicando que el módulo está correctamente conectado
+    - Si al arduino UNO le llega un valor (-7) el LED verde no enciende hasta que salga un código positivo
 
 -  **CONTROL DEL ESTADO DEL POST PARA ENVIO DE IMAGEN AL SERVIDOR**
-  -  (40) = Indica que el POST ha terminado correctamente
-  - (-40) = Indica error de POST
-  - cuando el arduino Uno recibe un codigo 40 enciende el LED BLANCO por 100ms esto indica el POST terminó correctamente y el servidor obtuvo la imagen.
+    -  (40) = Indica que el POST ha terminado correctamente
+    - (-40) = Indica error de POST
+    - cuando el arduino Uno recibe un codigo 40 enciende el LED BLANCO por 100ms esto indica el POST terminó correctamente y el servidor obtuvo la imagen.
 
 -  **CONTROL DE LAS CAPTURAS CON EL RELOJ**
-   - (7306) = Indica que el ESP32-CAM debe tomar capturas y mandarlas al servidor, básicamente gracias al reloj se pueden establecer periodos de tiempo en los que el ESP32-CAM debe enviar
-  capturas al servidor, esto está siendo implementado para tener una simulación de lo que sería un horario.
+     - (7306) = Indica que el ESP32-CAM debe tomar capturas y mandarlas al servidor, básicamente gracias al reloj se pueden establecer periodos de tiempo en los que el ESP32-CAM debe enviar
+      capturas al servidor, esto está siendo implementado para tener una simulación de lo que sería un horario.
 
 
 # DIAGRAMA CONEXIÓN: ARDUINO UNO R3, ESP-32S, SERVO MOTOR, IR RECIBE, TTLtoUSB, Reloj DS1307
