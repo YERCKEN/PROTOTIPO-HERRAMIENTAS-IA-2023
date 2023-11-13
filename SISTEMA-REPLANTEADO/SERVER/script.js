@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    setInterval(fetchAndInsertImage, 500);  // Cambiado de 500 a 5000 para actualizar cada 5 segundos
+    setInterval(fetchAndInsertImage, 1000);  // Cambiado de 500 a 5000 para actualizar cada 5 segundos
 
     fetchAndInsertImage();
 });
@@ -63,6 +63,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     rightButton.addEventListener('mouseup', function() {
+        sendValueToServer('0');
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Referencia a los botones
+    const upButton = document.getElementById('upButton');
+    const downButton = document.getElementById('downButton');
+
+    sendValueToServer('0');
+
+    // Cambiar los valores de los botones upButton y downButton
+    downButton.addEventListener('mousedown', function() {
+        sendValueToServer('2');  // Cambiar de '-2' a '2'
+    });
+
+    downButton.addEventListener('mouseup', function() {
+        sendValueToServer('0');
+    });
+
+    upButton.addEventListener('mousedown', function() {
+        sendValueToServer('-2');  // Cambiar de '2' a '-2'
+    });
+
+    upButton.addEventListener('mouseup', function() {
         sendValueToServer('0');
     });
 });

@@ -8,15 +8,9 @@ if(isset($_POST['direction'])) {
 
     // Obtener el valor de movimiento directamente de la base de datos
     $movimiento = obtenerMovimiento();
-    
     if($movimiento !== null) {
-        echo $movimiento;
+        echo $movimiento; 
     }
-
-
     exit;
-
 }
 ?>
-
-
