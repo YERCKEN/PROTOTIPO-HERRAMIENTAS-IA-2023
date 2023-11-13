@@ -216,20 +216,34 @@ void loop() {
       }
       lastIRTime = millis();
       lastIRWasRight = false;
+
+    }else if (valor == 70) {
+    // Arriba
+    anguloVerticalInicial += incrementoAngulo;
+    if (anguloVerticalInicial > 180) {
+      anguloVerticalInicial = 180;
     }
+  } else if (valor == 21) {
+    // Abajo
+    anguloVerticalInicial -= incrementoAngulo;
+    if (anguloVerticalInicial < 0) {
+      anguloVerticalInicial = 0;
+    }
+  }
 
     // Update the servo position
     servoHorizontal.write(anguloHorizontalInicial);
+    servoVertical.write( anguloVerticalInicial);
 
-    Serial.print("Dirección: ");
-    Serial.print((valor == 67) ? "Derecha" : "Izquierda");
-    Serial.print(", Ángulo: ");
-    Serial.println(anguloHorizontalInicial);
+    //Serial.print("Dirección: ");
+    //Serial.print((valor == 67) ? "Derecha" : "Izquierda");
+    //Serial.print(", Ángulo: ");
+    //Serial.println(anguloHorizontalInicial);
 
-    Serial.print("Valor IR recibido: ");
-    Serial.println(valor);
+    //Serial.print("Valor IR recibido: ");
+    //Serial.println(valor);
 
-    IrReceiver.resume(); // Continue listening for IR remote commands
+    //IrReceiver.resume(); // Continue listening for IR remote commands
   }
   
 }
@@ -266,4 +280,27 @@ void moveServoRight() {
 
   // Actualiza la posición del servo
   servoHorizontal.write(anguloHorizontalInicial);
+}
+
+
+// ARRIBA ------------------------------------------------
+void moveServoUp() {
+  anguloVerticalInicial += incrementoAngulo;
+  if (anguloVerticalInicial > 180) {
+    anguloVerticalInicial = 180;
+  }
+
+  // Actualiza la posición del servo vertical
+  servoVertical.write(anguloVerticalInicial);
+}
+
+// ABAJO -------------------------------------------------
+void moveServoDown() {
+  anguloVerticalInicial -= incrementoAngulo;
+  if (anguloVerticalInicial < 0) {
+    anguloVerticalInicial = 0;
+  }
+
+  // Actualiza la posición del servo vertical
+  servoVertical.write(anguloVerticalInicial);
 }
