@@ -11,7 +11,7 @@ unsigned long previousMillis = 0;
 const unsigned long interval = 250;
 
 //PIN DEL SENSOR IR
-//const byte PIN_RECEPTOR_INFRARROJO = 3;
+const byte PIN_RECEPTOR_INFRARROJO = 3;
 
 //==================================================   SERVOS   =================================================================
 
@@ -51,11 +51,13 @@ void setup() {
   Serial.begin(115200);
 
   //HABILITACIÓN RECEPTOR Y LED DEL MÓDULOO
-   //IrReceiver.begin(PIN_RECEPTOR_INFRARROJO, ENABLE_LED_FEEDBACK);
+  IrReceiver.begin(PIN_RECEPTOR_INFRARROJO, ENABLE_LED_FEEDBACK);
 
   //LEDS
   pinMode(pinLedWifi, OUTPUT);
+  
   pinMode(pinLedServo, OUTPUT);
+
   pinMode(pinLedCamPost, OUTPUT);
   pinMode(pinLedCamCap, OUTPUT);
 
@@ -123,7 +125,7 @@ void loop() {
   }
 
   //RELOJ ---------------------------------------------------------------------------------
-  
+  /*
   // Verificar si ha transcurrido un segundo
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
@@ -141,7 +143,7 @@ void loop() {
         Serial.println(7306);
       }
 
-      /*
+      
       IMPRESION DE HORA ------------------------------------
 
       // Comenzamos a imprimir la informacion
@@ -163,7 +165,7 @@ void loop() {
       Serial.write('/');
       Serial.print(tmYearToCalendar(datetime.Year));
       Serial.println();
-     */
+     
     }
     else {
       if (RTC.chipPresent()) {
@@ -180,57 +182,56 @@ void loop() {
       for (;;);
     }
   }
-
+*/
 
   
-
-  /*
   // Control del servoHorizontal con el receptor IR
   if (IrReceiver.decode()) {
     int valor = IrReceiver.decodedIRData.command;
 
+    static unsigned long lastIRTime = 0;
+    static bool lastIRWasRight = false;
+
+    if (millis() - lastIRTime > 1) {
+      // If it's been more than 1 milliseconds since the last IR command,
+      // accept the new command, regardless of the previous direction.
+      lastIRWasRight = false;
+    }
+
     if (valor == 67) {
       // Derecha
-      anguloHorizontalInicial += incrementoAngulo;
-      if (anguloHorizontalInicial > 180) {
-        anguloHorizontalInicial = 180;
+      if (!lastIRWasRight) {
+        anguloHorizontalInicial += incrementoAngulo;
+        if (anguloHorizontalInicial > 180) {
+          anguloHorizontalInicial = 180;
+        }
+        lastIRTime = millis();
+        lastIRWasRight = true;
       }
-      ultimaTeclaPresionada = 67; // Actualiza la última tecla
     } else if (valor == 68) {
       // Izquierda
       anguloHorizontalInicial -= incrementoAngulo;
       if (anguloHorizontalInicial < 0) {
         anguloHorizontalInicial = 0;
       }
-      ultimaTeclaPresionada = 68; // Actualiza la última tecla
-    } else if (valor == 0) {
-      // Si el valor es 0, mueve en la dirección de la última tecla presionada
-      if (ultimaTeclaPresionada == 67) {
-        anguloHorizontalInicial += incrementoAngulo;
-        if (anguloHorizontalInicial > 180) {
-          anguloHorizontalInicial = 180;
-        }
-      } else if (ultimaTeclaPresionada == 68) {
-        anguloHorizontalInicial -= incrementoAngulo;
-        if (anguloHorizontalInicial < 0) {
-          anguloHorizontalInicial = 0;
-        }
-      }
+      lastIRTime = millis();
+      lastIRWasRight = false;
     }
 
+    // Update the servo position
     servoHorizontal.write(anguloHorizontalInicial);
 
     Serial.print("Dirección: ");
-    Serial.print((ultimaTeclaPresionada == 67) ? "Derecha" : "Izquierda");
+    Serial.print((valor == 67) ? "Derecha" : "Izquierda");
     Serial.print(", Ángulo: ");
     Serial.println(anguloHorizontalInicial);
 
     Serial.print("Valor IR recibido: ");
     Serial.println(valor);
 
-    IrReceiver.resume(); // Continuar escuchando
+    IrReceiver.resume(); // Continue listening for IR remote commands
   }
-  */
+  
 }
 
 //Funcion auxiliar para imprimir siempre 2 digitos ====================================================
