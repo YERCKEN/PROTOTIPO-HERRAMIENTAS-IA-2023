@@ -89,5 +89,3 @@ function obtenerMovimiento() {
         return null;
     }
 }
-
-?>

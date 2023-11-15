@@ -5,7 +5,6 @@ if (isset($_POST['movimiento'])) {
 
     // Actualizar el valor en la base de datos
     $resultado = actualizarMovimiento($movimiento);
-
     if($resultado) {
         echo "Valor recibido y actualizado: " . $movimiento;
     } else {
@@ -15,5 +14,6 @@ if (isset($_POST['movimiento'])) {
     echo "No se recibió ningún valor.";
 }
 ?>
+
 
 
