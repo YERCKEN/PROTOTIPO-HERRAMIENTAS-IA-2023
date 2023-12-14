@@ -146,7 +146,7 @@ void loop() {
       int currentMinute = datetime.Minute;
       
       //HORAS DE IMPRESION
-      if (currentHour == 17 && currentMinute >= 6 && currentMinute <= 17) {
+      if (currentHour == 17 && currentMinute >= 35 && currentMinute <= 50) {
         Serial.println(7306);
       }
 
