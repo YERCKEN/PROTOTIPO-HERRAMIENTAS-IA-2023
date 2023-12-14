@@ -28,19 +28,20 @@ WebServer server(80);
 //const char* ssid = "Yercken";
 //const char* password = "123456789";
 
-const char* ssid = "CWC-7986324-2.4";
+const char* ssid = "CWC-7986324";
 const char* password = "snns7pdTxnkw";
 
 //======================================================================================
 // CONEXIÓN SERVIDOR
 //======================================================================================
 //JEISSON
-//const char* urlServidor = "http://esp32server2.000webhostapp.com/index.php";
-//const char* urlServidorDirection = "http://esp32server2.000webhostapp.com/direction_endpoint.php";
+const char* urlServidor = "http://esp32server2.000webhostapp.com/index.php";
+const char* urlServidorDirection = "http://esp32server2.000webhostapp.com/direction_endpoint.php";
+const char* urlServidorDirectionY = "http://esp32server2.000webhostapp.com/direction_endpoint2.php";
 
 //ORLANDO
-const char* urlServidor = "http://190.32.101.144/esp32/index.php";
-const char* urlServidorDirection = "http://190.32.101.144/esp32/direction_endpoint.php";
+//const char* urlServidor = "http://190.32.101.144/esp32/index.php";
+//const char* urlServidorDirection = "http://190.32.101.144/esp32/direction_endpoint.php";
 
 //EDWAR
 //const char* urlServidor = "http://esp32camimgb64recibe.000webhostapp.com/index.php";
@@ -257,11 +258,20 @@ void sendDirection(const char* direction) {
     //Serial.printf("[HTTP] POST SERVO CON éxito, código: %d\n", httpCode);
     // Imprime la respuesta del servidor
     String response = http.getString();
+
     //Serial.println(response);
+
+    //Serial.println("\n");
 
     //MOVIMIENTO DEL SERVO SEGÚN LA RESPUESTA
     if (response.equals("1")){ 
          Serial.println(1);
+      }
+    else if(response.equals("2")){
+        Serial.println(2);
+      }
+    else if(response.equals("-2")){
+        Serial.println(-2);
       }
     else if(response.equals("-1")){
         Serial.println(-1);
@@ -278,6 +288,9 @@ void sendDirection(const char* direction) {
   // Libera los recursos de HTTPClient
   http.end();
 }
+
+
+
 
 
 //======================================================================================
@@ -305,20 +318,36 @@ void startCameraServer() {
 
   //CONTROL DE SERVOS DESDE CUALQUIER IP =================================================================
   
-  server.on("/left", HTTP_GET, [](){
+  server.on("/L", HTTP_GET, [](){
       server.sendHeader("Access-Control-Allow-Origin", "*");
       server.sendHeader("Access-Control-Max-Age", "10000");
       server.sendHeader("Access-Control-Allow-Methods", "GET");
 
-      //Serial.println(-1);
+      Serial.println(-1);
     });
     
-  server.on("/right", HTTP_GET, [](){
+  server.on("/R", HTTP_GET, [](){
     server.sendHeader("Access-Control-Allow-Origin", "*");
       server.sendHeader("Access-Control-Max-Age", "10000");
       server.sendHeader("Access-Control-Allow-Methods", "GET");
       
-      //Serial.println(1);
+      Serial.println(1);
+    });
+
+  server.on("/U", HTTP_GET, [](){
+      server.sendHeader("Access-Control-Allow-Origin", "*");
+      server.sendHeader("Access-Control-Max-Age", "10000");
+      server.sendHeader("Access-Control-Allow-Methods", "GET");
+
+      Serial.println(2);
+    });
+    
+  server.on("/D", HTTP_GET, [](){
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+      server.sendHeader("Access-Control-Max-Age", "10000");
+      server.sendHeader("Access-Control-Allow-Methods", "GET");
+      
+      Serial.println(-2);
     });
 
   // -----------------------------------------------------------------------------------------------
@@ -337,12 +366,14 @@ void loop() {
   // Obtiene el tiempo actual
   unsigned long currentMillis = millis(); 
 
+  
   // Enviar la dirección cada 250 ms
   if (currentMillis - previousSendTime >= sendInterval) {
     sendDirection("holaMandameLadireccion");
+    //sendDirectionY("holaMandameLadireccion");
     previousSendTime = currentMillis; // Actualizar el tiempo del último envío
   }
-
+  
   
 
   if (Serial.available() > 0) {

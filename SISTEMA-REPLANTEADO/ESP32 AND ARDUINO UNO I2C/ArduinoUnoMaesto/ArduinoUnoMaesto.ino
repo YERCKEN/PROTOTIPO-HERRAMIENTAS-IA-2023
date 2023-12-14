@@ -23,7 +23,6 @@ int anguloHorizontalInicial = 90; // Ángulo horizontal inicial
 int anguloVerticalInicial = 90;   // Ángulo vertical inicial
 // INCREMENTO
 int incrementoAngulo = 5;   
-int ultimaTeclaPresionada = 0;
 
 //==================================================   SETUP   =================================================================
 
@@ -86,10 +85,18 @@ void loop() {
     //Serial.println(datoRecibido);
 
     // VERIFICACIÓN DE DIRRECCIÓN
+    //DERECCHA
     if (datoRecibido == 1) {
       moveServoRight();
+    //IZQUIERDA
     } else if (datoRecibido == -1) {
       moveServoLeft();
+    //ARRIBA
+    } else if (datoRecibido == 2) {
+      moveServoUp();
+    //ABAJO
+    } else if (datoRecibido == -2) {
+      moveServoDown();
 
     //CONECTIVIDAD WIFI
     } else if (datoRecibido == -7) {
@@ -125,7 +132,7 @@ void loop() {
   }
 
   //RELOJ ---------------------------------------------------------------------------------
-  /*
+  
   // Verificar si ha transcurrido un segundo
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
@@ -139,24 +146,25 @@ void loop() {
       int currentMinute = datetime.Minute;
       
       //HORAS DE IMPRESION
-      if (currentHour == 20 && currentMinute >= 11 && currentMinute <= 11 ) {
+      if (currentHour == 17 && currentMinute >= 6 && currentMinute <= 17) {
         Serial.println(7306);
       }
 
       
-      IMPRESION DE HORA ------------------------------------
-
+      //IMPRESION DE HORA ------------------------------------
+      
+      /*
       // Comenzamos a imprimir la informacion
-      //Serial.print(F("OK, Time = "));
+      Serial.print(F("OK, Time = "));
       print2digits(datetime.Hour);
       Serial.write(':');
       print2digits(datetime.Minute);
       Serial.write(':');
       print2digits(datetime.Second);
       Serial.println();
-      */
-      /*
-      IMPRESION DE FECHA -----------------------------------
+      
+      
+      //IMPRESION DE FECHA -----------------------------------
 
       Serial.print(F(", Date (D/M/Y) = "));
       Serial.print(datetime.Day);
@@ -165,8 +173,10 @@ void loop() {
       Serial.write('/');
       Serial.print(tmYearToCalendar(datetime.Year));
       Serial.println();
-     
+     */
     }
+
+    /*
     else {
       if (RTC.chipPresent()) {
         // El reloj esta detenido, es necesario ponerlo a tiempo
@@ -179,10 +189,10 @@ void loop() {
         Serial.println(F("REVISA TUS CONEXIONES E INTENTA DE NUEVO"));
       }
       // Esperamos indefinidamente
-      for (;;);
-    }
+      for (;;); 
+    }*/
   }
-*/
+
 
   
   // Control del servoHorizontal con el receptor IR
@@ -243,7 +253,7 @@ void loop() {
     //Serial.print("Valor IR recibido: ");
     //Serial.println(valor);
 
-    //IrReceiver.resume(); // Continue listening for IR remote commands
+    IrReceiver.resume(); // Continue listening for IR remote commands
   }
   
 }
