@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 15-12-2023 a las 03:35:35
+-- Tiempo de generación: 15-12-2023 a las 03:46:26
 -- Versión del servidor: 10.5.20-MariaDB
 -- Versión de PHP: 7.3.33
 
@@ -20,17 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `id21461313_postesp32cambd`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `abrecierra`
---
-
-CREATE TABLE `abrecierra` (
-  `id` int(11) NOT NULL,
-  `valor` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -69,27 +58,9 @@ CREATE TABLE `movimientoServo` (
 INSERT INTO `movimientoServo` (`id`, `movimiento`) VALUES
 (1, '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usua`
---
-
-CREATE TABLE `usua` (
-  `ID` int(11) NOT NULL,
-  `nombre` varchar(25) DEFAULT NULL,
-  `contraseña` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `abrecierra`
---
-ALTER TABLE `abrecierra`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `mi_tabla`
@@ -104,32 +75,14 @@ ALTER TABLE `movimientoServo`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usua`
---
-ALTER TABLE `usua`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `abrecierra`
---
-ALTER TABLE `abrecierra`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientoServo`
 --
 ALTER TABLE `movimientoServo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `usua`
---
-ALTER TABLE `usua`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
