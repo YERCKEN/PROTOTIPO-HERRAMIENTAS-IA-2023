@@ -11,7 +11,7 @@ unsigned long previousMillis = 0;
 const unsigned long interval = 250;
 
 //PIN DEL SENSOR IR
-//const byte PIN_RECEPTOR_INFRARROJO = 3;
+const byte PIN_RECEPTOR_INFRARROJO = 3;
 
 //==================================================   SERVOS   =================================================================
 
@@ -23,7 +23,6 @@ int anguloHorizontalInicial = 90; // Ángulo horizontal inicial
 int anguloVerticalInicial = 90;   // Ángulo vertical inicial
 // INCREMENTO
 int incrementoAngulo = 5;   
-int ultimaTeclaPresionada = 0;
 
 //==================================================   SETUP   =================================================================
 
@@ -51,11 +50,13 @@ void setup() {
   Serial.begin(115200);
 
   //HABILITACIÓN RECEPTOR Y LED DEL MÓDULOO
-   //IrReceiver.begin(PIN_RECEPTOR_INFRARROJO, ENABLE_LED_FEEDBACK);
+  IrReceiver.begin(PIN_RECEPTOR_INFRARROJO, ENABLE_LED_FEEDBACK);
 
   //LEDS
   pinMode(pinLedWifi, OUTPUT);
+  
   pinMode(pinLedServo, OUTPUT);
+
   pinMode(pinLedCamPost, OUTPUT);
   pinMode(pinLedCamCap, OUTPUT);
 
@@ -84,10 +85,18 @@ void loop() {
     //Serial.println(datoRecibido);
 
     // VERIFICACIÓN DE DIRRECCIÓN
+    //DERECCHA
     if (datoRecibido == 1) {
       moveServoRight();
+    //IZQUIERDA
     } else if (datoRecibido == -1) {
       moveServoLeft();
+    //ARRIBA
+    } else if (datoRecibido == 2) {
+      moveServoUp();
+    //ABAJO
+    } else if (datoRecibido == -2) {
+      moveServoDown();
 
     //CONECTIVIDAD WIFI
     } else if (datoRecibido == -7) {
@@ -137,24 +146,25 @@ void loop() {
       int currentMinute = datetime.Minute;
       
       //HORAS DE IMPRESION
-      if (currentHour == 20 && currentMinute >= 11 && currentMinute <= 11 ) {
+      if (currentHour == 17 && currentMinute >= 35 && currentMinute <= 50) {
         Serial.println(7306);
       }
 
+      
+      //IMPRESION DE HORA ------------------------------------
+      
       /*
-      IMPRESION DE HORA ------------------------------------
-
       // Comenzamos a imprimir la informacion
-      //Serial.print(F("OK, Time = "));
+      Serial.print(F("OK, Time = "));
       print2digits(datetime.Hour);
       Serial.write(':');
       print2digits(datetime.Minute);
       Serial.write(':');
       print2digits(datetime.Second);
       Serial.println();
-      */
-      /*
-      IMPRESION DE FECHA -----------------------------------
+      
+      
+      //IMPRESION DE FECHA -----------------------------------
 
       Serial.print(F(", Date (D/M/Y) = "));
       Serial.print(datetime.Day);
@@ -165,6 +175,8 @@ void loop() {
       Serial.println();
      */
     }
+
+    /*
     else {
       if (RTC.chipPresent()) {
         // El reloj esta detenido, es necesario ponerlo a tiempo
@@ -177,60 +189,73 @@ void loop() {
         Serial.println(F("REVISA TUS CONEXIONES E INTENTA DE NUEVO"));
       }
       // Esperamos indefinidamente
-      for (;;);
-    }
+      for (;;); 
+    }*/
   }
 
 
   
-
-  /*
   // Control del servoHorizontal con el receptor IR
   if (IrReceiver.decode()) {
     int valor = IrReceiver.decodedIRData.command;
 
+    static unsigned long lastIRTime = 0;
+    static bool lastIRWasRight = false;
+
+    if (millis() - lastIRTime > 1) {
+      // If it's been more than 1 milliseconds since the last IR command,
+      // accept the new command, regardless of the previous direction.
+      lastIRWasRight = false;
+    }
+
     if (valor == 67) {
       // Derecha
-      anguloHorizontalInicial += incrementoAngulo;
-      if (anguloHorizontalInicial > 180) {
-        anguloHorizontalInicial = 180;
+      if (!lastIRWasRight) {
+        anguloHorizontalInicial += incrementoAngulo;
+        if (anguloHorizontalInicial > 180) {
+          anguloHorizontalInicial = 180;
+        }
+        lastIRTime = millis();
+        lastIRWasRight = true;
       }
-      ultimaTeclaPresionada = 67; // Actualiza la última tecla
     } else if (valor == 68) {
       // Izquierda
       anguloHorizontalInicial -= incrementoAngulo;
       if (anguloHorizontalInicial < 0) {
         anguloHorizontalInicial = 0;
       }
-      ultimaTeclaPresionada = 68; // Actualiza la última tecla
-    } else if (valor == 0) {
-      // Si el valor es 0, mueve en la dirección de la última tecla presionada
-      if (ultimaTeclaPresionada == 67) {
-        anguloHorizontalInicial += incrementoAngulo;
-        if (anguloHorizontalInicial > 180) {
-          anguloHorizontalInicial = 180;
-        }
-      } else if (ultimaTeclaPresionada == 68) {
-        anguloHorizontalInicial -= incrementoAngulo;
-        if (anguloHorizontalInicial < 0) {
-          anguloHorizontalInicial = 0;
-        }
-      }
+      lastIRTime = millis();
+      lastIRWasRight = false;
+
+    }else if (valor == 70) {
+    // Arriba
+    anguloVerticalInicial += incrementoAngulo;
+    if (anguloVerticalInicial > 180) {
+      anguloVerticalInicial = 180;
     }
-
-    servoHorizontal.write(anguloHorizontalInicial);
-
-    Serial.print("Dirección: ");
-    Serial.print((ultimaTeclaPresionada == 67) ? "Derecha" : "Izquierda");
-    Serial.print(", Ángulo: ");
-    Serial.println(anguloHorizontalInicial);
-
-    Serial.print("Valor IR recibido: ");
-    Serial.println(valor);
-
-    IrReceiver.resume(); // Continuar escuchando
+  } else if (valor == 21) {
+    // Abajo
+    anguloVerticalInicial -= incrementoAngulo;
+    if (anguloVerticalInicial < 0) {
+      anguloVerticalInicial = 0;
+    }
   }
-  */
+
+    // Update the servo position
+    servoHorizontal.write(anguloHorizontalInicial);
+    servoVertical.write( anguloVerticalInicial);
+
+    //Serial.print("Dirección: ");
+    //Serial.print((valor == 67) ? "Derecha" : "Izquierda");
+    //Serial.print(", Ángulo: ");
+    //Serial.println(anguloHorizontalInicial);
+
+    //Serial.print("Valor IR recibido: ");
+    //Serial.println(valor);
+
+    IrReceiver.resume(); // Continue listening for IR remote commands
+  }
+  
 }
 
 //Funcion auxiliar para imprimir siempre 2 digitos ====================================================
@@ -265,4 +290,27 @@ void moveServoRight() {
 
   // Actualiza la posición del servo
   servoHorizontal.write(anguloHorizontalInicial);
+}
+
+
+// ARRIBA ------------------------------------------------
+void moveServoUp() {
+  anguloVerticalInicial += incrementoAngulo;
+  if (anguloVerticalInicial > 180) {
+    anguloVerticalInicial = 180;
+  }
+
+  // Actualiza la posición del servo vertical
+  servoVertical.write(anguloVerticalInicial);
+}
+
+// ABAJO -------------------------------------------------
+void moveServoDown() {
+  anguloVerticalInicial -= incrementoAngulo;
+  if (anguloVerticalInicial < 0) {
+    anguloVerticalInicial = 0;
+  }
+
+  // Actualiza la posición del servo vertical
+  servoVertical.write(anguloVerticalInicial);
 }
