@@ -89,3 +89,24 @@ function obtenerMovimiento() {
         return null;
     }
 }
+// Función para agregar valores a la columna horario
+function agregarHorario($img, $horario) {
+    global $conn;
+    
+    // Escapar y sanitizar los valores para evitar inyección de SQL
+    //$img = $conn->real_escape_string($img);
+    //$horario = $conn->real_escape_string($horario);
+    
+    // Construir y ejecutar la consulta utilizando una sentencia preparada
+    $stmt = $conn->prepare("INSERT INTO horarioCam (img, horario) VALUES (?, ?)");
+    $stmt->bind_param("ss", $img, $horario);
+    
+    if ($stmt->execute()) {
+        echo "Se ha insertado el horario correctamente.";
+    } else {
+        echo "Error al insertar el horario: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+?>
