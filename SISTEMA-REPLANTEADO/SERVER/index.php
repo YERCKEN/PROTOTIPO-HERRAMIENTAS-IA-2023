@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $horaSistema = $horaPanama->format('Y-m-d H:i:s');
         
         // Suponiendo que tu función actualizarImagenBase64 ahora acepta un segundo parámetro para el número de cámara
-        if (actualizarImagenBase64(1, $base64ImageAlt) and agregarHorario($base64ImageAlt, $horaSistema)) {
+        if (actualizarImagenBase64(1, $base64ImageAlt, $horaSistema)) {
             echo "Recibido correctamente";
         } else {
             echo "Error al guardar la imagen en la base de datos.";

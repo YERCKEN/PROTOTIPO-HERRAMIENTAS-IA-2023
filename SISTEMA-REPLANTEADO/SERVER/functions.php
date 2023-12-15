@@ -1,31 +1,32 @@
 <?php
 require_once 'config.php';
 
-function guardarImagenBase64($imagen) {
+function guardarImagenBase64($imagen, $horario) {
     global $conn;
 
-    $stmt = $conn->prepare("INSERT INTO mi_tabla (data_base64) VALUES (?)");
-    $stmt->bind_param("s", $imagen);
-
+    $stmt = $conn->prepare("INSERT INTO mi_tabla (data_base64, horario) VALUES (?, ?)");
+    $stmt->bind_param("ss", $imagen, $horario);
     $resultado = $stmt->execute();
 
     $stmt->close();
 
     return $resultado;
 }
-function actualizarImagenBase64($id, $imagen) {
+function actualizarImagenBase64($id, $imagen, $horario) {
     global $conn;
 
-    $stmt = $conn->prepare("UPDATE mi_tabla SET data_base64 = ? WHERE id = ?");
-    $stmt->bind_param("si", $imagen, $id);
+    $stmt = $conn->prepare("UPDATE mi_tabla SET data_base64 = ?, horario = ? WHERE id = ?");
+    $stmt->bind_param("sss", $imagen, $horario, $id);
 
     $resultado = $stmt->execute();
 
     $stmt->close();
 
-    return $resultado;
     $conn->close();
+
+    return $resultado;
 }
+
 function obtenerImagenBase64PorID($id) {
     global $conn;
 
@@ -89,24 +90,5 @@ function obtenerMovimiento() {
         return null;
     }
 }
-// Función para agregar valores a la columna horario
-function agregarHorario($img, $horario) {
-    global $conn;
-    
-    // Escapar y sanitizar los valores para evitar inyección de SQL
-    //$img = $conn->real_escape_string($img);
-    //$horario = $conn->real_escape_string($horario);
-    
-    // Construir y ejecutar la consulta utilizando una sentencia preparada
-    $stmt = $conn->prepare("INSERT INTO horarioCam (img, horario) VALUES (?, ?)");
-    $stmt->bind_param("ss", $img, $horario);
-    
-    if ($stmt->execute()) {
-        echo "Se ha insertado el horario correctamente.";
-    } else {
-        echo "Error al insertar el horario: " . $stmt->error;
-    }
 
-    $stmt->close();
-}
 ?>
