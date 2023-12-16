@@ -10,10 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Eliminar espacios en blanco y retornos de carro
         $base64ImageAlt = str_replace(' ', '+', $base64Image);
+        // Obtener la hora actual de Panamá
+        $timezone = new DateTimeZone('America/Panama');
+        $horaPanama = new DateTime('now', $timezone);
+        $horaSistema = $horaPanama->format('Y-m-d H:i:s');
         
         // Suponiendo que tu función actualizarImagenBase64 ahora acepta un segundo parámetro para el número de cámara
-        if (actualizarImagenBase64(2, $base64ImageAlt)) {
-            echo "Recibido correctamente desde la camara: 2";
+        if (actualizarImagenBase64(2, $base64ImageAlt, $horaSistema)) {
+            echo "Recibido correctamente";
         } else {
             echo "Error al guardar la imagen en la base de datos.";
         }
